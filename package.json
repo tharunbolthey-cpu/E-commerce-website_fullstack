@@ -1,0 +1,26 @@
+{
+  "name": "atelier-commerce",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "tsc --noEmit",
+    "backend:dev": "npm --prefix backend run dev",
+    "backend:start": "npm --prefix backend start",
+    "backend:seed": "npm --prefix backend run seed"
+  },
+  "dependencies": {
+    "lucide-react": "^1.34.0",
+    "next": "15.5.7",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2",
+    "@types/react": "19.0.6",
+    "@types/react-dom": "19.0.2",
+    "typescript": "5.7.2"
+  }
+}
