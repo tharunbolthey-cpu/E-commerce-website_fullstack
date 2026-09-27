@@ -90,107 +90,71 @@ export default function AdminProducts() {
   ========================================================= */
 
   const handleDelete = async (
-    product: any
-  ) => {
-    const productId =
-      getProductId(product);
+  product: any
+) => {
+  const productId = getProductId(product);
 
-    console.log(
-      'Product being deleted:',
-      product
+  console.log(
+    'Product being deleted:',
+    product
+  );
+
+  console.log(
+    'MongoDB _id:',
+    product?._id
+  );
+
+  console.log(
+    'Delete ID:',
+    productId
+  );
+
+  if (!productId) {
+    alert(
+      'Product MongoDB ID is missing.'
     );
 
-    console.log(
-      'MongoDB _id:',
-      product?._id
+    return;
+  }
+
+  const confirmed =
+    window.confirm(
+      `Delete ${product.name}?`
     );
 
-    console.log(
-      'Delete ID:',
-      productId
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    setDeletingId(productId);
+
+    /*
+     * Use the existing AppProvider deleteProduct().
+     *
+     * It deletes from MongoDB and immediately
+     * removes the product from the frontend state.
+     */
+    await deleteProduct(productId);
+
+    alert(
+      'Product deleted successfully.'
+    );
+  } catch (error) {
+    console.error(
+      'Delete product error:',
+      error
     );
 
-    console.log(
-      'Delete URL:',
-      `${API_URL}/api/products/${productId}`
+    alert(
+      error instanceof Error
+        ? error.message
+        : 'Failed to delete product.'
     );
-
-    if (!productId) {
-      alert(
-        'Product MongoDB ID is missing.'
-      );
-
-      return;
-    }
-
-    const confirmed =
-      window.confirm(
-        `Delete ${product.name}?`
-      );
-
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-      setDeletingId(
-        productId
-      );
-
-      /*
-       * IMPORTANT:
-       * Delete directly from MongoDB.
-       */
-      const response =
-        await fetch(
-          `${API_URL}/api/products/${productId}`,
-          {
-            method: 'DELETE',
-          }
-        );
-
-      const data =
-        await response.json();
-
-      console.log(
-        'Delete response:',
-        data
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          data?.message ||
-            data?.error ||
-            'Failed to delete product.'
-        );
-      }
-
-      /*
-       * Refresh products from MongoDB.
-       */
-      await refresh();
-
-      alert(
-        'Product deleted successfully.'
-      );
-    } catch (error) {
-      console.error(
-        'Delete product error:',
-        error
-      );
-
-      alert(
-        error instanceof Error
-          ? error.message
-          : 'Failed to delete product.'
-      );
-    } finally {
-      setDeletingId(
-        null
-      );
-    }
-  };
-
+  } finally {
+    setDeletingId(null);
+  }
+};
   return (
     <div>
       {/* =====================================================

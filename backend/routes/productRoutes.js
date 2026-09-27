@@ -19,13 +19,10 @@ const router =
 /* =========================================================
    GET ALL PRODUCTS
 ========================================================= */
-
-router.get('/', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Products route is working'
-  });
-});
+router.get(
+  '/',
+  getProducts
+);
 
 /* =========================================================
    GET SINGLE PRODUCT

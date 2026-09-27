@@ -73,7 +73,7 @@ export default function Orders() {
             <div style={{ marginTop: 15 }}>
               {o.items.map((i) => (
                 <div
-                  key={i.productId}
+                  key={`${i.productId}-${i.quantity}-${i.price}`}
                   className="summary-row"
                 >
                   <span>

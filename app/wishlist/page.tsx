@@ -10,9 +10,13 @@ export default function Wishlist() {
     products,
   } = useApp();
 
-  const list = products.filter((p) =>
+  const list = products.filter((p: any) =>
     wishlist.some(
-      (w) => w.productId === p.id
+      (w: any) =>
+        String(w.productId) ===
+          String(p.id) ||
+        String(w.productId) ===
+          String(p._id)
     )
   );
 

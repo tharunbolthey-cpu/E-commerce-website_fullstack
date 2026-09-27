@@ -37,7 +37,7 @@ import {
   saveReviews,
   saveUsers,
   saveWishlist,
-} from '@/lib/storage';
+} from '../../lib/storage';
 
 
 const API_URL =
@@ -502,6 +502,7 @@ export function AppProvider({
       'MongoDB products:',
       data
     );
+    
 
     if (
       data.success &&
@@ -516,6 +517,8 @@ export function AppProvider({
               product
             )
         );
+
+        
 
       setProducts(
         normalizedProducts
@@ -1091,80 +1094,61 @@ export function AppProvider({
   };
 
   const addProduct = (
-    product: Product
-  ) => {
-    const normalized =
-      normalizeProduct(
-        product
+  product: Product
+) => {
+  const normalized =
+    normalizeProduct(product);
+
+  setProducts((prev) => [
+    normalized,
+    ...prev,
+  ]);
+};
+  const deleteProduct = async (
+  id: string
+) => {
+  try {
+    const response =
+      await fetch(
+        `http://localhost:5000/api/products/${id}`,
+        {
+          method: 'DELETE',
+        }
       );
 
-    const next = [
-      normalized,
-      ...products,
-    ];
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data?.message ||
+          data?.error ||
+          'Failed to delete product.'
+      );
+    }
+
+    const next =
+      products.filter(
+        (product) =>
+          String(
+            (product as any)._id ||
+              product.id
+          ) !== String(id)
+      );
 
     setProducts(next);
-
     saveProducts(next);
-  };
 
-  const deleteProduct = async (
-    id: string
-  ) => {
-    try {
-      const response =
-        await fetch(
-          `${API_URL}/${id}`,
-          {
-            method: 'DELETE',
-          }
-        );
+    return true;
+  } catch (error) {
+    console.error(
+      'Delete product error:',
+      error
+    );
 
-      const data =
-        await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data?.message ||
-            'Failed to delete product.'
-        );
-      }
-
-      setProducts(
-        (prev) =>
-          prev.filter(
-            (product) =>
-              String(
-                (product as any)._id ||
-                  product.id
-              ) !==
-              String(id)
-          )
-      );
-
-      const next =
-        products.filter(
-          (product) =>
-            String(
-              (product as any)._id ||
-                product.id
-            ) !==
-            String(id)
-        );
-
-      saveProducts(next);
-
-      return true;
-    } catch (error) {
-      console.error(
-        'Delete product error:',
-        error
-      );
-
-      throw error;
-    }
-  };
-
+    throw error;
+  }
+};
   /* =======================================================
      CATEGORIES
   ======================================================= */

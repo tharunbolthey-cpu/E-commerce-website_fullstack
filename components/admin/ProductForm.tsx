@@ -12,12 +12,12 @@ export function ProductForm({
 }: {
   initial?: Product;
 }) {
-  const {
-    categories,
-    addProduct,
-    updateProduct,
-  } = useApp();
-
+const {
+  categories,
+  addProduct,
+  updateProduct,
+  refresh,
+} = useApp();
   const router = useRouter();
 
   const [images, setImages] = useState<File[]>(
@@ -314,21 +314,22 @@ const url = initial
        * Keep your existing AppProvider methods.
        */
       if (data?.product) {
-        if (initial) {
-          updateProduct(
-            data.product
-          );
-        } else {
-          addProduct(
-            data.product
-          );
-        }
-      }
+  if (initial) {
+    updateProduct(
+      data.product
+    );
+  } else {
+    addProduct(
+      data.product
+    );
+  }
+}
 
-      router.push(
-        '/admin/products'
-      );
+await refresh();
 
+router.push(
+  '/admin/products'
+);
       router.refresh();
     } catch (error) {
       console.error(

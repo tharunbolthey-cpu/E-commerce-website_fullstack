@@ -15,7 +15,7 @@ export default function ProductsPage() {
   const [sort, setSort] =
     useState('newest');
   const [min, setMin] = useState(0);
-  const [max, setMax] = useState(500);
+const [max, setMax] = useState(1000000);
   const [rating, setRating] = useState(0);
 
   const filtered = useMemo(() => {
