@@ -147,14 +147,12 @@ const startServer = async () => {
   try {
     await connectDatabase();
 
-    app.listen(PORT, () => {
+    app.listen(PORT,"0.0.0.0", () => {
       console.log(
-        `ATELIER API running on http://localhost:${PORT}`
-      );
+`ATELIER API running on http://0.0.0.0:${PORT}`      );
 
       console.log(
-        `Uploads available at http://localhost:${PORT}/uploads`
-      );
+`Uploads available at http://0.0.0.0:${PORT}/uploads`      );
     });
   } catch (error) {
     console.error(
