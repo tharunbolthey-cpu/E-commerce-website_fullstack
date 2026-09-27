@@ -1,4 +1,7 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/products';
+
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  'http://localhost:5000';
 
 export async function apiRequest<T>(
   path: string,
@@ -12,10 +15,14 @@ export async function apiRequest<T>(
     }
   });
 
-  const data = (await response.json()) as T & { message?: string };
+  const data = (await response.json()) as T & {
+    message?: string;
+  };
 
   if (!response.ok) {
-    throw new Error(data.message || 'API request failed.');
+    throw new Error(
+      data.message || 'API request failed.'
+    );
   }
 
   return data;
@@ -24,3 +31,4 @@ export async function apiRequest<T>(
 export function getApiUrl() {
   return API_URL;
 }
+

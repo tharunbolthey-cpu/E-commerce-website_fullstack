@@ -1,1 +1,1 @@
-export { AdminShell as AdminSidebar } from './AdminShell';
+export { AdminShell as AdminSidebar } from '../AdminShell';
